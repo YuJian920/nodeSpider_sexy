@@ -1,6 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const fs = require("fs");
+const saveImages = require("./utils/saveImages");
 
 const request = axios.create({
   methods: "GET",
@@ -36,7 +36,7 @@ urlArray = [
   "https://www.yitudao.com/meinv/rentiyishu/",
 ];
 
-let CURRY_PAGENUMBER = 1; // 爬取起始页码
+let CURRY_PAGENUMBER = 11; // 爬取起始页码
 let MAX_PAGENUMBER = 573; // 爬取最大页码
 
 // 爬取队列
@@ -97,34 +97,6 @@ const loadImages = async (url) => {
     return $(".img_box a img").attr("src");
   } catch (error) {
     console.log(`loadImages: 下载${url}时出现错误！`);
-    console.log(error);
-  }
-};
-
-// 图片下载
-const saveImages = async (imgObject) => {
-  try {
-    for (const imTitle in imgObject) {
-      imgObject[imTitle].forEach(async (eachItem, index) => {
-        console.log("正在下载 ===>", imTitle, index);
-        const filename = eachItem.split("/").pop();
-        const { data } = await axios({
-          url: eachItem,
-          responseType: "arraybuffer",
-        });
-        fs.access(`./Result/${imTitle}`, (accessErr) => {
-          if (accessErr) {
-            fs.mkdir(`./Result/${imTitle}`, (mkdirErr) => {
-              if (mkdirErr) console.log("目录创建失败");
-            });
-          } else {
-            fs.writeFileSync(`./Result/${imTitle}/${filename}`, data, "binary");
-          }
-        });
-      });
-    }
-  } catch (error) {
-    console.log(`saveImages: 下载图片时出现错误！`);
     console.log(error);
   }
 };
