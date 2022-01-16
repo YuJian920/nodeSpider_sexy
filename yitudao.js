@@ -43,7 +43,7 @@ let MAX_PAGENUMBER = 573; // 爬取最大页码
 const spiderQueue = async (soureUrl) => {
   const url = `${soureUrl}${CURRY_PAGENUMBER}.html`;
   request({ url }).then(async (res) => {
-    const $ = cheerio.load(res.data);=
+    const $ = cheerio.load(res.data);
 
     const requestQueue = [];
     $("a[title]").each((i, elem) => {
