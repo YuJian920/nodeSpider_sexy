@@ -5,7 +5,7 @@ const fs = require("fs");
  * 图片下载
  * @param {*} imgObject 图片 URL
  */
-function saveImages(imgObject) {
+function saveImages(imgObject, total) {
   return new Promise((resolve, reject) => {
     const forItem = Object.keys(imgObject);
     for (let forItemIndex = 0; forItemIndex < forItem.length; forItemIndex++) {
@@ -15,7 +15,7 @@ function saveImages(imgObject) {
         else {
           const alreadyPath = fs.readdirSync(`./Result/${imTitle}`);
           // 已有文件跳过
-          if (alreadyPath.length === imgObject[imTitle].length) {
+          if (alreadyPath.length === total) {
             console.log(`${imTitle} 已存在 跳过抓取`);
             resolve()
             return;

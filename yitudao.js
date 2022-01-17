@@ -36,7 +36,7 @@ urlArray = [
   "https://www.yitudao.com/meinv/rentiyishu/",
 ];
 
-let CURRY_PAGENUMBER = 1; // 爬取起始页码
+let CURRY_PAGENUMBER = 2; // 爬取起始页码
 let MAX_PAGENUMBER = 573; // 爬取最大页码
 
 // 爬取队列
@@ -56,7 +56,8 @@ const spiderQueue = async (soureUrl) => {
     for (let index = 0; index < requestQueue.length; index++) {
       console.log(
         `正在抓取第${CURRY_PAGENUMBER}页 ==>`,
-        requestQueue[index].title
+        requestQueue[index].title,
+        requestQueue[index].url
       );
       await loadHtml(requestQueue[index].url, requestQueue[index].title);
     }
@@ -74,15 +75,20 @@ const loadHtml = async (url, title) => {
     const $ = cheerio.load(data);
     const soureURL = url.substring(0, url.length - 5);
 
-    const forNum = $("#title .imageset-sum").html().slice(2);
+    const forNum = +$("#title .imageset-sum").html().slice(2);
 
     const loadQueue = [];
-    for (let index = 2; index <= forNum; index++) {
+    for (let index = 1; index <= forNum; index++) {
+      if (index === 1) {
+        const imageUrl = await loadImages(`${soureURL}.html`);
+        loadQueue.push(imageUrl);
+        continue;
+      }
       const imageUrl = await loadImages(`${soureURL}_${index}.html`);
       loadQueue.push(imageUrl);
     }
 
-    await saveImages({ [title]: loadQueue });
+    await saveImages({ [title]: loadQueue }, forNum);
   } catch (error) {
     console.log(`loadHtml: 下载${title}时出现错误！`);
     console.log(error);
