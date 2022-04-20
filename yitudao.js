@@ -11,17 +11,17 @@ const request = axios.create({
     "accept-encoding": "gzip, deflate, br",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
     dnt: "1",
-    "if-modified-since": "Thu, 15 Jan 2022 17:48:09 GMT",
-    "if-none-match": "1641491296",
-    "sec-ch-ua":
-      '" Not A;Brand";v="99", "Chromium";v="96", "Microsoft Edge";v="96"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "Windows",
-    "sec-fetch-dest": "document",
-    "sec-fetch-mode": "navigate",
-    "sec-fetch-site": "none",
-    "sec-fetch-user": "?1",
-    "upgrade-insecure-requests": 1,
+    // "if-modified-since": "Thu, 15 Jan 2022 17:48:09 GMT",
+    // "if-none-match": "1641491296",
+    // "sec-ch-ua":
+    //   '" Not A;Brand";v="99", "Chromium";v="96", "Microsoft Edge";v="96"',
+    // "sec-ch-ua-mobile": "?0",
+    // "sec-ch-ua-platform": "Windows",
+    // "sec-fetch-dest": "document",
+    // "sec-fetch-mode": "navigate",
+    // "sec-fetch-site": "none",
+    // "sec-fetch-user": "?1",
+    // "upgrade-insecure-requests": 1,
     "user-agent":
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 Edg/96.0.1054.62",
   },
@@ -37,7 +37,7 @@ urlArray = [
 ];
 
 let CURRY_PAGENUMBER = 2; // 爬取起始页码
-let MAX_PAGENUMBER = 573; // 爬取最大页码
+let MAX_PAGENUMBER = 577; // 爬取最大页码
 
 // 爬取队列
 const spiderQueue = async (soureUrl) => {
