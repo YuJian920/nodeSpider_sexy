@@ -17,7 +17,7 @@ const request = axios.create({
   },
 });
 
-let CURRY_PAGENUMBER = 11; // 爬取起始页码
+let CURRY_PAGENUMBER = 1; // 爬取起始页码
 let MAX_PAGENUMBER = 127; // 爬取最大页码
 
 /**
@@ -55,7 +55,7 @@ const spiderQueue = async (soureUrl) => {
 const startQueue = async () => {
   for (
     CURRY_PAGENUMBER;
-    CURRY_PAGENUMBER < MAX_PAGENUMBER;
+    CURRY_PAGENUMBER <= MAX_PAGENUMBER;
     CURRY_PAGENUMBER++
   ) {
     console.log(`开始爬取第${CURRY_PAGENUMBER}页`);

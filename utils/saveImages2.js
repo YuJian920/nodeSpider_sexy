@@ -3,10 +3,10 @@ const fs = require("fs");
 
 function saveImages2(imgList, listName, path = "Result") {
   return new Promise((resolve, reject) => {
-    fs.access(`./${path}/${listName}`, async (accessErr) => {
-      if (accessErr) fs.mkdirSync(`./${path}/${listName}`);
+    fs.access(`../Result/${path}/${listName}`, async (accessErr) => {
+      if (accessErr) fs.mkdirSync(`../Result/${path}/${listName}`);
       else {
-        const alreadyPath = fs.readdirSync(`./${path}/${listName}`);
+        const alreadyPath = fs.readdirSync(`../Result/${path}/${listName}`);
         // 已有文件跳过
         if (alreadyPath.length === imgList.length) {
           console.log(`${listName} 已存在 跳过抓取`);
@@ -25,7 +25,11 @@ function saveImages2(imgList, listName, path = "Result") {
             url: eachItem,
             responseType: "arraybuffer",
           });
-          fs.writeFileSync(`./${path}/${listName}/${filename}`, data, "binary");
+          fs.writeFileSync(
+            `../Result/${path}/${listName}/${filename}`,
+            data,
+            "binary"
+          );
         } catch (error) {
           console.log(`saveImages: 下载图片时出现错误！`);
           console.log(error);

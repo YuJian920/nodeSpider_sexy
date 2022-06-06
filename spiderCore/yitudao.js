@@ -80,7 +80,7 @@ const loadHtml = async (url, title) => {
     }
 
     // await saveImages({ [title]: loadQueue }, forNum);
-    await saveImages(loadQueue, title, "Result/yitudao");
+    await saveImages(loadQueue, title, "yitudao");
   } catch (error) {
     console.log(`loadHtml: 下载${title}时出现错误！`);
     console.log(error);
@@ -102,7 +102,7 @@ const loadImages = async (url) => {
 const startQueue = async (urlArray) => {
   for (
     CURRY_PAGENUMBER;
-    CURRY_PAGENUMBER < MAX_PAGENUMBER;
+    CURRY_PAGENUMBER <= MAX_PAGENUMBER;
     CURRY_PAGENUMBER++
   ) {
     await spiderQueue(urlArray[0]);
