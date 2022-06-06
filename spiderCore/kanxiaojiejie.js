@@ -1,6 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const saveImages = require("./utils/saveImages2");
+const saveImages = require("../utils/saveImages2");
 
 const request = axios.create({
   methods: "GET",
