@@ -1,7 +1,9 @@
+/**
+ * 这个js可能不能正常工作，因为在测试的时候遇到了网站的反爬
+ */
+
 const axios = require("axios");
 const cheerio = require("cheerio");
-const iconv = require("iconv-lite");
-
 const saveImages = require("./utils/saveImages");
 
 const request = axios.create({
@@ -55,8 +57,6 @@ const spiderQueue = async (soureUrl) => {
     }
 
     console.log(`第${CURRY_PAGENUMBER}页全部抓取完成`);
-    CURRY_PAGENUMBER++;
-    if (CURRY_PAGENUMBER <= MAX_PAGENUMBER) spiderQueue(soureUrl);
   });
 };
 
@@ -75,12 +75,10 @@ const loadHtml = async (url, title) => {
       loadQueue.push(...imageUrl);
     }
 
-    console.log(loadQueue);
-
     await saveImages({ [title]: loadQueue }, loadQueue.length, "Cos");
   } catch (error) {
     console.log(`loadHtml: 下载${title}时出现错误！`);
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -95,8 +93,14 @@ const loadImages = async (url) => {
     return imagesQueue;
   } catch (error) {
     console.log(`loadImages: 下载${url}时出现错误！`);
-    console.log(error);
+    // console.log(error);
   }
 };
 
-spiderQueue("https://www.xinwenba.net/plus/list-20020-1.html");
+const startQueue = async () => {
+  for (CURRY_PAGENUMBER; CURRY_PAGENUMBER < MAX_PAGENUMBER; CURRY_PAGENUMBER++) {
+    await spiderQueue("https://www.xinwenba.net/plus/list-20020-1.html");
+  }
+};
+
+startQueue();

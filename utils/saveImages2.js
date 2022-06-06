@@ -16,7 +16,7 @@ function saveImages2(imgList, listName, path = "Result") {
       }
 
       for (let urlIndex = 0; urlIndex < imgList.length; urlIndex++) {
-        const eachItem = imgList[urlIndex].url;
+        const eachItem = imgList[urlIndex]?.url || imgList[urlIndex];
         console.log("正在下载 ===>", listName, urlIndex + 1, eachItem);
 
         try {

@@ -1,6 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const saveImages = require("./utils/saveImages");
+const saveImages = require("./utils/saveImages2");
 
 const request = axios.create({
   methods: "GET",
@@ -11,17 +11,6 @@ const request = axios.create({
     "accept-encoding": "gzip, deflate, br",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
     dnt: "1",
-    // "if-modified-since": "Thu, 15 Jan 2022 17:48:09 GMT",
-    // "if-none-match": "1641491296",
-    // "sec-ch-ua":
-    //   '" Not A;Brand";v="99", "Chromium";v="96", "Microsoft Edge";v="96"',
-    // "sec-ch-ua-mobile": "?0",
-    // "sec-ch-ua-platform": "Windows",
-    // "sec-fetch-dest": "document",
-    // "sec-fetch-mode": "navigate",
-    // "sec-fetch-site": "none",
-    // "sec-fetch-user": "?1",
-    // "upgrade-insecure-requests": 1,
     "user-agent":
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 Edg/96.0.1054.62",
   },
@@ -36,36 +25,38 @@ urlArray = [
   "https://www.yitudao.com/meinv/rentiyishu/",
 ];
 
-let CURRY_PAGENUMBER = 2; // 爬取起始页码
-let MAX_PAGENUMBER = 577; // 爬取最大页码
+let CURRY_PAGENUMBER = 1; // 爬取起始页码
+let MAX_PAGENUMBER = 578; // 爬取最大页码
 
 // 爬取队列
 const spiderQueue = async (soureUrl) => {
-  const url = `${soureUrl}${CURRY_PAGENUMBER}.html`;
-  request({ url }).then(async (res) => {
-    const $ = cheerio.load(res.data);
+  const requestQueue = [];
+  let url = "";
 
-    const requestQueue = [];
-    $("a[title]").each((i, elem) => {
-      requestQueue.push({
-        title: $(elem).attr("title"),
-        url: $(elem).attr("href"),
-      });
+  // 针对第一页特殊处理
+  if (CURRY_PAGENUMBER === 1) url = soureUrl;
+  else url = `${soureUrl}${CURRY_PAGENUMBER}.html`;
+
+  const res = await request({ url });
+  const $ = cheerio.load(res.data);
+
+  $("a[title]").each((i, elem) => {
+    requestQueue.push({
+      title: $(elem).attr("title"),
+      url: $(elem).attr("href"),
     });
-
-    for (let index = 0; index < requestQueue.length; index++) {
-      console.log(
-        `正在抓取第${CURRY_PAGENUMBER}页 ==>`,
-        requestQueue[index].title,
-        requestQueue[index].url
-      );
-      await loadHtml(requestQueue[index].url, requestQueue[index].title);
-    }
-
-    console.log(`第${CURRY_PAGENUMBER}页全部抓取完成`);
-    CURRY_PAGENUMBER++;
-    if (CURRY_PAGENUMBER <= MAX_PAGENUMBER) spiderQueue(soureUrl);
   });
+
+  for (let index = 0; index < requestQueue.length; index++) {
+    console.log(
+      `正在抓取第${CURRY_PAGENUMBER}页 ==>`,
+      requestQueue[index].title,
+      requestQueue[index].url
+    );
+    await loadHtml(requestQueue[index].url, requestQueue[index].title);
+  }
+
+  console.log(`第${CURRY_PAGENUMBER}页全部抓取完成`);
 };
 
 // 加载 HTML
@@ -88,7 +79,8 @@ const loadHtml = async (url, title) => {
       loadQueue.push(imageUrl);
     }
 
-    await saveImages({ [title]: loadQueue }, forNum);
+    // await saveImages({ [title]: loadQueue }, forNum);
+    await saveImages(loadQueue, title, "Result/yitudao");
   } catch (error) {
     console.log(`loadHtml: 下载${title}时出现错误！`);
     console.log(error);
@@ -107,4 +99,14 @@ const loadImages = async (url) => {
   }
 };
 
-spiderQueue(urlArray[0]);
+const startQueue = async (urlArray) => {
+  for (
+    CURRY_PAGENUMBER;
+    CURRY_PAGENUMBER < MAX_PAGENUMBER;
+    CURRY_PAGENUMBER++
+  ) {
+    await spiderQueue(urlArray[0]);
+  }
+};
+
+startQueue(urlArray);
