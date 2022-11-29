@@ -40,9 +40,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-Result/
-Cos/
-Kanxiaojiejie/
+download/
 
 # TypeScript v1 declaration files
 typings/
